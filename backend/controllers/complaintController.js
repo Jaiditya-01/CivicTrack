@@ -21,7 +21,7 @@ exports.createComplaint = async (req, res) => {
       // assignedDepartment intentionally omitted - set by admin/officer later
     });
 
-    const populatedComplaint = await complaint.populate('citizen', 'name email phone');
+    const populatedComplaint = await complaint.populate('citizen', 'name email phone profileImage');
 
     res.status(201).json({
       success: true,
@@ -54,7 +54,7 @@ exports.getAllComplaints = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const complaints = await Complaint.find(query)
-      .populate('citizen', 'name email phone')
+      .populate('citizen', 'name email phone profileImage')
       .populate('assignedOfficer', 'name email')
       .skip(skip)
       .limit(parseInt(limit))
@@ -84,7 +84,7 @@ exports.getAllComplaints = async (req, res) => {
 exports.getComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id)
-      .populate('citizen', 'name email phone address city')
+      .populate('citizen', 'name email phone address city profileImage')
       .populate('assignedOfficer', 'name email phone');
 
     if (!complaint) {
@@ -139,7 +139,7 @@ exports.updateComplaintStatus = async (req, res) => {
       new: true,
       runValidators: true,
     })
-      .populate('citizen', 'name email phone')
+      .populate('citizen', 'name email phone profileImage')
       .populate('assignedOfficer', 'name email phone');
 
     if (!complaint) {
@@ -190,6 +190,39 @@ exports.rateComplaint = async (req, res) => {
     res.status(200).json({
       success: true,
       complaint,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// @desc    Get complaint status summary (for current user: citizen = own, admin = all)
+// @route   GET /api/complaints/stats/summary
+// @access  Private
+exports.getStatsSummary = async (req, res) => {
+  try {
+    let query = {};
+    if (req.user.role === 'citizen') {
+      query.citizen = req.user.id;
+    }
+    const total = await Complaint.countDocuments(query);
+    const pending = await Complaint.countDocuments({ ...query, status: 'pending' });
+    const inProgress = await Complaint.countDocuments({ ...query, status: 'in_progress' });
+    const resolved = await Complaint.countDocuments({ ...query, status: 'resolved' });
+    const rejected = await Complaint.countDocuments({ ...query, status: 'rejected' });
+
+    res.status(200).json({
+      success: true,
+      summary: {
+        total,
+        pending,
+        inProgress,
+        resolved,
+        rejected,
+      },
     });
   } catch (error) {
     res.status(500).json({

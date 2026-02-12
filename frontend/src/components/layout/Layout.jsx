@@ -9,18 +9,23 @@ import { useAuth } from '../../contexts/AuthContext';
 export default function Layout() {
   const { user, logout } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.theme === 'dark' || 
-        (!('theme' in localStorage) && 
-         window.matchMedia('(prefers-color-scheme: dark)').matches);
-    }
-    return false;
-  });
-
+  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const location = useLocation();
 
+  // Initialize theme from localStorage or system preference
   useEffect(() => {
+    const isDark = localStorage.theme === 'dark' || 
+      (!('theme' in localStorage) && 
+       window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setDarkMode(isDark);
+    setMounted(true);
+  }, []);
+
+  // Apply theme changes
+  useEffect(() => {
+    if (!mounted) return;
+    
     if (darkMode) {
       document.documentElement.classList.add('dark');
       localStorage.theme = 'dark';
@@ -28,12 +33,17 @@ export default function Layout() {
       document.documentElement.classList.remove('dark');
       localStorage.theme = 'light';
     }
-  }, [darkMode]);
+  }, [darkMode, mounted]);
 
   // Close sidebar when route changes
   useEffect(() => {
     setIsSidebarOpen(false);
   }, [location]);
+
+  // Only render UI when mounted to avoid hydration issues
+  if (!mounted) {
+    return <div className="min-h-screen bg-background" />;
+  }
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -43,49 +53,63 @@ export default function Layout() {
     ...(isAdmin ? [{ name: 'Dashboard', path: '/dashboard', icon: '📊' }] : []),
     { name: 'Complaints', path: '/complaints', icon: '📝' },
     { name: 'Map View', path: '/map', icon: '🗺️' },
+    { name: 'Help', path: '/help', icon: '❓' },
     { name: 'Profile', path: '/profile', icon: '👤' },
   ];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Mobile header */}
-      <header className="lg:hidden fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border">
+      <header className="lg:hidden fixed top-0 inset-x-0 z-50 bg-background/80 dark:bg-background/90 backdrop-blur-sm border-b border-border transition-colors duration-200">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden"
+              className="lg:hidden hover:bg-accent/50 transition-colors"
             >
               {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              CivicTrack
-            </h1>
+            <Link to="/" className="flex items-center space-x-2 group">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-sm">
+                <span className="text-white font-bold text-lg">CT</span>
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent bg-300% animate-gradient">
+                CivicTrack
+              </h1>
+            </Link>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleDarkMode}
-            className="rounded-full"
-          >
-            {darkMode ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className="rounded-full hover:bg-accent/50 transition-colors"
+              aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {darkMode ? (
+                <Sun className="h-5 w-5 text-amber-400" />
+              ) : (
+                <Moon className="h-5 w-5 text-foreground/80" />
+              )}
+            </Button>
+          </div>
         </div>
       </header>
 
       <div className="flex flex-1 pt-16 lg:pt-0">
         {/* Desktop sidebar */}
-        <aside className="hidden lg:flex flex-col w-64 border-r border-border bg-background/50">
-          <div className="flex items-center h-16 px-6 border-b border-border">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              CivicTrack
-            </h1>
+        <aside className="hidden lg:flex flex-col w-72 border-r border-border bg-background/80 dark:bg-background/90 backdrop-blur-sm transition-colors duration-200">
+          <div className="flex items-center h-20 px-6 border-b border-border">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                <span className="text-white font-bold text-xl">CT</span>
+              </div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent bg-300% animate-gradient">
+                CivicTrack
+              </h1>
+            </Link>
           </div>
           <nav className="flex-1 p-4 space-y-1">
             {navItems.map((item) => (
@@ -104,6 +128,28 @@ export default function Layout() {
             ))}
           </nav>
           <div className="p-4 border-t border-border space-y-2">
+            {user && (
+              <Link
+                to="/profile"
+                className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-accent/50"
+              >
+                {user.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt=""
+                    className="w-9 h-9 rounded-full object-cover border border-border"
+                  />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                    {(user.name || 'U').slice(0, 1).toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1 text-left">
+                  <p className="text-sm font-medium truncate">{user.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                </div>
+              </Link>
+            )}
             <Button
               variant="outline"
               className="w-full justify-start"
@@ -173,7 +219,30 @@ export default function Layout() {
                     </Link>
                   ))}
                 </nav>
-                <div className="p-4 border-t border-border">
+                <div className="p-4 border-t border-border space-y-2">
+                  {user && (
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsSidebarOpen(false)}
+                      className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-accent/50"
+                    >
+                      {user.profileImage ? (
+                        <img
+                          src={user.profileImage}
+                          alt=""
+                          className="w-9 h-9 rounded-full object-cover border border-border"
+                        />
+                      ) : (
+                        <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                          {(user.name || 'U').slice(0, 1).toUpperCase()}
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1 text-left">
+                        <p className="text-sm font-medium truncate">{user.name}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      </div>
+                    </Link>
+                  )}
                   <Button
                     variant="outline"
                     className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"

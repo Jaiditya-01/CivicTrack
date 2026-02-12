@@ -12,6 +12,7 @@ import ComplaintDetail from './pages/ComplaintDetail';
 import MapView from './pages/MapView';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
+import HelpPage from './pages/HelpPage';
 import NotFound from './pages/NotFound';
 import './styles/globals.css';
 
@@ -112,6 +113,7 @@ function App() {
                 <Route path="complaints/:id" element={<ComplaintDetail />} />
                 <Route path="map" element={<MapView />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="help" element={<HelpPage />} />
               </Route>
 
               {/* 404 route */}

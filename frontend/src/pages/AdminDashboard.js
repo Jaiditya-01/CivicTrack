@@ -124,7 +124,18 @@ export default function AdminDashboard() {
                   {complaints.map((complaint) => (
                     <tr key={complaint._id} className="border-b hover:bg-muted/50">
                       <td className="py-3 px-2 font-mono text-xs">{complaint.complaintId || complaint._id?.slice(-6)}</td>
-                      <td className="py-3 px-2">{complaint.citizen?.name ?? '—'}</td>
+                      <td className="py-3 px-2">
+                        <div className="flex items-center gap-2">
+                          {complaint.citizen?.profileImage ? (
+                            <img
+                              src={complaint.citizen.profileImage}
+                              alt=""
+                              className="w-7 h-7 rounded-full object-cover border border-border"
+                            />
+                          ) : null}
+                          <span>{complaint.citizen?.name ?? '—'}</span>
+                        </div>
+                      </td>
                       <td className="py-3 px-2 capitalize">{complaint.issueType?.replace('_', ' ') ?? '—'}</td>
                       <td className="py-3 px-2 max-w-[180px] truncate">{complaint.location?.address ?? '—'}</td>
                       <td className="py-3 px-2">

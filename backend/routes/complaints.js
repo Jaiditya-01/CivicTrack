@@ -7,6 +7,7 @@ const {
   updateComplaintStatus,
   rateComplaint,
   getStats,
+  getStatsSummary,
   deleteComplaint,
 } = require('../controllers/complaintController');
 const { protect, authorize } = require('../middleware/auth');
@@ -14,6 +15,7 @@ const { protect, authorize } = require('../middleware/auth');
 router.post('/', protect, authorize('citizen'), createComplaint);
 router.get('/', protect, getAllComplaints);
 router.get('/stats/overview', protect, authorize('admin', 'department_officer'), getStats);
+router.get('/stats/summary', protect, getStatsSummary);
 router.get('/:id', protect, getComplaint);
 router.put('/:id/status', protect, authorize('admin', 'department_officer'), updateComplaintStatus);
 router.put('/:id/rate', protect, authorize('citizen'), rateComplaint);
