@@ -10,6 +10,7 @@ import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Icons } from '../../components/ui/icons';
 import { cn } from '../../lib/utils';
+import { ArrowRight } from 'lucide-react';
 
 const registerSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -79,223 +80,180 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Dynamic Background Decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-primary/30 blur-[120px] animate-float" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[100px] animate-float" style={{ animationDelay: '2s', animationDuration: '8s' }} />
+        <div className="absolute top-[30%] right-[30%] w-[300px] h-[300px] rounded-full bg-purple-500/20 blur-[80px] animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-2xl relative z-10"
       >
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-white/10 backdrop-blur-xl">
           <div className="p-8">
             <div className="text-center mb-8">
               <motion.div
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center"
+                className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/30"
               >
                 <Icons.logo className="h-8 w-8 text-white" />
               </motion.div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Create an account</h1>
-              <p className="text-gray-600 dark:text-gray-300">Fill in your details to get started</p>
+              <h1 className="text-3xl font-bold gradient-text-primary mb-2">Create an account</h1>
+              <p className="text-muted-foreground">Fill in your details to get started</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Full Name
-                  </Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Icons.user className="h-5 w-5 text-gray-400" />
+                  <Label htmlFor="name" className="text-foreground">Full Name</Label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                      <Icons.user className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                     </div>
                     <Input
                       id="name"
                       type="text"
                       placeholder="John Doe"
-                      className={cn(
-                        'pl-10',
-                        errors.name && 'border-red-500 focus:ring-red-500'
-                      )}
+                      className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.name && 'border-red-500')}
                       {...register('name')}
                       disabled={isLoading}
                     />
                   </div>
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-                  )}
+                  {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Phone
-                  </Label>
+                  <Label htmlFor="phone" className="text-foreground">Phone</Label>
                   <Input
                     id="phone"
                     type="tel"
                     placeholder="9876543210"
-                    className={cn(
-                      errors.phone && 'border-red-500 focus:ring-red-500'
-                    )}
+                    className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.phone && 'border-red-500')}
                     {...register('phone')}
                     disabled={isLoading}
                   />
-                  {errors.phone && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
-                  )}
+                  {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
                 </div>
               </div>
 
               {/* Email & City */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Email
-                  </Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Icons.mail className="h-5 w-5 text-gray-400" />
+                  <Label htmlFor="email" className="text-foreground">Email</Label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                      <Icons.mail className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                     </div>
                     <Input
                       id="email"
                       type="email"
                       placeholder="you@example.com"
-                      className={cn(
-                        'pl-10',
-                        errors.email && 'border-red-500 focus:ring-red-500'
-                      )}
+                      className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.email && 'border-red-500')}
                       {...register('email')}
                       disabled={isLoading}
                     />
                   </div>
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                  )}
+                  {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="city" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    City
-                  </Label>
+                  <Label htmlFor="city" className="text-foreground">City</Label>
                   <Input
                     id="city"
                     type="text"
                     placeholder="Your city"
-                    className={cn(
-                      errors.city && 'border-red-500 focus:ring-red-500'
-                    )}
+                    className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.city && 'border-red-500')}
                     {...register('city')}
                     disabled={isLoading}
                   />
-                  {errors.city && (
-                    <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
-                  )}
+                  {errors.city && <p className="mt-1 text-sm text-red-500">{errors.city.message}</p>}
                 </div>
               </div>
 
               {/* Address */}
               <div className="space-y-2">
-                <Label htmlFor="address" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Address (optional)
-                </Label>
+                <Label htmlFor="address" className="text-foreground">Address (optional)</Label>
                 <Input
                   id="address"
                   type="text"
                   placeholder="Street, area, landmark"
-                  className={cn(
-                    errors.address && 'border-red-500 focus:ring-red-500'
-                  )}
+                  className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.address && 'border-red-500')}
                   {...register('address')}
                   disabled={isLoading}
                 />
-                {errors.address && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
-                )}
+                {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
               </div>
 
               {/* Department (optional) */}
               <div className="space-y-2">
-                <Label htmlFor="department" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Department (optional)
-                </Label>
+                <Label htmlFor="department" className="text-foreground">Department (optional)</Label>
                 <select
                   id="department"
                   className={cn(
-                    'block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white dark:border-gray-600',
+                    'block w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary/50 text-white transition-all duration-300',
                     errors.department && 'border-red-500 focus:ring-red-500'
                   )}
                   {...register('department')}
                   disabled={isLoading}
                   defaultValue=""
                 >
-                  <option value="">Select department</option>
-                  <option value="roads">Roads</option>
-                  <option value="water">Water</option>
-                  <option value="electricity">Electricity</option>
-                  <option value="sanitation">Sanitation</option>
-                  <option value="public_safety">Public Safety</option>
+                  <option value="" className="bg-gray-900 text-foreground">Select department</option>
+                  <option value="roads" className="bg-gray-900 text-foreground">Roads</option>
+                  <option value="water" className="bg-gray-900 text-foreground">Water</option>
+                  <option value="electricity" className="bg-gray-900 text-foreground">Electricity</option>
+                  <option value="sanitation" className="bg-gray-900 text-foreground">Sanitation</option>
+                  <option value="public_safety" className="bg-gray-900 text-foreground">Public Safety</option>
                 </select>
-                {errors.department && (
-                  <p className="mt-1 text-sm text-red-600">{errors.department.message}</p>
-                )}
+                {errors.department && <p className="mt-1 text-sm text-red-500">{errors.department.message}</p>}
               </div>
 
               {/* Password */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Icons.lock className="h-5 w-5 text-gray-400" />
+                <Label htmlFor="password" className="text-foreground">Password</Label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                    <Icons.lock className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                   </div>
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
-                    className={cn(
-                      'pl-10',
-                      errors.password && 'border-red-500 focus:ring-red-500'
-                    )}
+                    className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.password && 'border-red-500')}
                     {...register('password')}
                     disabled={isLoading}
                   />
                 </div>
-                {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                )}
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+                <p className="mt-1 text-xs text-muted-foreground">
                   Must be at least 8 characters with uppercase, lowercase, number and special character
                 </p>
               </div>
 
               {/* Confirm Password */}
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Confirm Password
-                </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Icons.lock className="h-5 w-5 text-gray-400" />
+                <Label htmlFor="confirmPassword" className="text-foreground">Confirm Password</Label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                    <Icons.lock className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                   </div>
                   <Input
                     id="confirmPassword"
                     type="password"
                     placeholder="••••••••"
-                    className={cn(
-                      'pl-10',
-                      errors.confirmPassword && 'border-red-500 focus:ring-red-500'
-                    )}
+                    className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.confirmPassword && 'border-red-500')}
                     {...register('confirmPassword')}
                     disabled={isLoading}
                   />
                 </div>
-                {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
-                )}
+                {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>}
               </div>
 
               <div className="flex items-start">
@@ -304,18 +262,18 @@ export default function Register() {
                     id="terms"
                     name="terms"
                     type="checkbox"
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary border-white/20 bg-black/40 rounded"
                     required
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label htmlFor="terms" className="font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="terms" className="font-medium text-muted-foreground">
                     I agree to the{' '}
-                    <a href="#" className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                    <a href="#" className="text-primary hover:text-primary/80">
                       Terms and Conditions
                     </a>{' '}
                     and{' '}
-                    <a href="#" className="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                    <a href="#" className="text-primary hover:text-primary/80">
                       Privacy Policy
                     </a>
                   </label>
@@ -325,7 +283,7 @@ export default function Register() {
               <div className="mt-6">
                 <Button
                   type="submit"
-                  className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg text-sm px-5"
+                  className="w-full h-11 text-base shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 transform hover:scale-[1.02]"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -334,19 +292,22 @@ export default function Register() {
                       Creating account...
                     </>
                   ) : (
-                    'Create Account'
+                    <>
+                      Create Account
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
               </div>
             </form>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                  <div className="w-full border-t border-white/10"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                  <span className="px-2 bg-transparent text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
@@ -356,32 +317,32 @@ export default function Register() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
                   disabled={isLoading}
                 >
-                  <Icons.google className="h-5 w-5" />
-                  <span className="ml-2">Google</span>
+                  <Icons.google className="h-5 w-5 mr-2" />
+                  Google
                 </Button>
 
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
                   disabled={isLoading}
                 >
-                  <Icons.github className="h-5 w-5" />
-                  <span className="ml-2">GitHub</span>
+                  <Icons.github className="h-5 w-5 mr-2" />
+                  GitHub
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+          <div className="bg-white/5 px-6 py-4 text-center border-t border-white/10 backdrop-blur-md">
+            <p className="text-sm text-muted-foreground">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                className="font-medium text-primary hover:text-primary/80 transition-colors hover:underline"
               >
                 Sign in
               </Link>

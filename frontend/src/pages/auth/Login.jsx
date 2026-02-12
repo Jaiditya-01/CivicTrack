@@ -8,7 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Icons } from '../../components/ui/icons';
 
@@ -44,43 +44,50 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Dynamic Background Decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-primary/30 blur-[120px] animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[100px] animate-float" style={{ animationDelay: '2s', animationDuration: '8s' }} />
+        <div className="absolute top-[40%] left-[30%] w-[300px] h-[300px] rounded-full bg-purple-500/20 blur-[80px] animate-pulse-glow" style={{ animationDelay: '1s' }} />
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-md relative z-10"
       >
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-white/10 backdrop-blur-xl">
           <div className="p-8">
             <div className="text-center mb-8">
               <motion.div
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center"
+                className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/30"
               >
                 <span className="text-white font-bold text-xl">CT</span>
               </motion.div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome back</h1>
-              <p className="text-gray-600 dark:text-gray-300">Sign in to your account</p>
+              <h1 className="text-3xl font-bold gradient-text-primary mb-2">Welcome back</h1>
+              <p className="text-muted-foreground">Sign in to your account</p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <Label htmlFor="email" className="text-sm font-medium text-foreground">
                   Email
                 </Label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-gray-400" />
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                    <Mail className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                   </div>
                   <Input
                     id="email"
                     type="email"
                     placeholder="you@example.com"
                     className={cn(
-                      'pl-10',
+                      'pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300',
                       errors.email && 'border-red-500 focus:ring-red-500'
                     )}
                     {...register('email')}
@@ -88,32 +95,32 @@ export default function Login() {
                   />
                 </div>
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-sm text-red-500 font-medium">{errors.email.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label htmlFor="password" className="text-sm font-medium text-foreground">
                     Password
                   </Label>
                   <Link
                     to="/forgot-password"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                    className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                   >
                     Forgot password?
                   </Link>
                 </div>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400" />
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
+                    <Lock className="h-5 w-5 text-muted-foreground group-focus-within:text-primary" />
                   </div>
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     className={cn(
-                      'pl-10',
+                      'pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300',
                       errors.password && 'border-red-500 focus:ring-red-500'
                     )}
                     {...register('password')}
@@ -121,7 +128,7 @@ export default function Login() {
                   />
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-sm text-red-500 font-medium">{errors.password.message}</p>
                 )}
               </div>
 
@@ -130,9 +137,9 @@ export default function Login() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-white/20 bg-black/40 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-muted-foreground">
                   Remember me
                 </label>
               </div>
@@ -140,7 +147,7 @@ export default function Login() {
               <div>
                 <Button
                   type="submit"
-                  className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg text-sm px-5"
+                  className="w-full h-11 text-base shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 transform hover:scale-[1.02]"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -149,19 +156,22 @@ export default function Login() {
                       Signing in...
                     </>
                   ) : (
-                    'Sign in'
+                    <>
+                      Sign in
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
               </div>
             </form>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                  <div className="w-full border-t border-white/10"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                  <span className="px-2 bg-transparent text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
@@ -171,32 +181,32 @@ export default function Login() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
                   disabled={isLoading}
                 >
-                  <AlertCircle className="h-4 w-4" />
-                  <span className="ml-2">Google</span>
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  Google
                 </Button>
 
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
                   disabled={isLoading}
                 >
-                  <Icons.github className="h-5 w-5" />
-                  <span className="ml-2">GitHub</span>
+                  <Icons.github className="h-5 w-5 mr-2" />
+                  GitHub
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 text-center">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+          <div className="bg-white/5 px-6 py-4 text-center border-t border-white/10 backdrop-blur-md">
+            <p className="text-sm text-muted-foreground">
               Don't have an account?{' '}
               <Link
                 to="/register"
-                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                className="font-medium text-primary hover:text-primary/80 transition-colors hover:underline"
               >
                 Sign up
               </Link>
@@ -205,13 +215,13 @@ export default function Login() {
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-xs text-muted-foreground/60">
             By continuing, you agree to our{' '}
-            <a href="#" className="text-blue-600 hover:underline dark:text-blue-400">
+            <a href="#" className="hover:text-primary transition-colors hover:underline">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className="text-blue-600 hover:underline dark:text-blue-400">
+            <a href="#" className="hover:text-primary transition-colors hover:underline">
               Privacy Policy
             </a>
             .

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { 
+import {
   AlertCircle,
   CheckCircle,
   Clock,
@@ -85,56 +85,60 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col md:flex-row md:items-start md:justify-between gap-4"
-        >
-          <div className="max-w-3xl flex items-center gap-4">
-            {user?.profileImage ? (
-              <img
-                src={user.profileImage}
-                alt=""
-                className="w-14 h-14 rounded-full border-2 border-white/30 object-cover shrink-0"
-              />
-            ) : null}
-            <div>
-              <h1 className="text-3xl font-bold mb-2 text-white">Welcome back, {user?.name || 'User'}!</h1>
-              <p className="text-blue-100">
-                Here's what's happening with your complaints and reports today.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3">
-              <Button variant="secondary" className="bg-white/10 hover:bg-white/20" asChild>
-                <Link to="/complaints/new">
-                  <Plus className="mr-2 h-4 w-4" />
-                  New Complaint
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="bg-transparent border-white/20 text-white hover:bg-white/10"
-                asChild
-              >
-                <Link to="/complaints">
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  View All
-                </Link>
-              </Button>
+      <div className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 opacity-90" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col md:flex-row md:items-start md:justify-between gap-4"
+          >
+            <div className="max-w-3xl flex items-center gap-4">
+              {user?.profileImage ? (
+                <img
+                  src={user.profileImage}
+                  alt=""
+                  className="w-14 h-14 rounded-full border-2 border-white/30 object-cover shrink-0"
+                />
+              ) : null}
+              <div>
+                <h1 className="text-3xl font-bold mb-2 text-white">Welcome back, {user?.name || 'User'}!</h1>
+                <p className="text-blue-100">
+                  Here's what's happening with your complaints and reports today.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Button variant="secondary" className="bg-white/10 hover:bg-white/20" asChild>
+                    <Link to="/complaints/new">
+                      <Plus className="mr-2 h-4 w-4" />
+                      New Complaint
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="bg-transparent border-white/20 text-white hover:bg-white/10"
+                    asChild
+                  >
+                    <Link to="/complaints">
+                      <RefreshCw className="mr-2 h-4 w-4" />
+                      View All
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="shrink-0 bg-white/10 border-white/20 text-white hover:bg-white/20"
-            onClick={logout}
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
-        </motion.div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="shrink-0 bg-white/10 border-white/20 text-white hover:bg-white/20"
+              onClick={logout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </motion.div>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -212,11 +216,10 @@ export default function Dashboard() {
                           {complaint.description}
                         </p>
                         <div className="mt-1">
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            complaint.status === 'resolved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                          <span className={`text-xs px-2 py-1 rounded-full ${complaint.status === 'resolved' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                             : complaint.status === 'in_progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
-                          }`}>
+                              : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+                            }`}>
                             {complaint.status?.replace('_', ' ')}
                           </span>
                         </div>
@@ -275,8 +278,8 @@ export default function Dashboard() {
                 <MapPin className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                 <span className="group-hover:font-medium">Report Location Issue</span>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="justify-start group hover:bg-primary/10 hover:text-primary transition-all duration-300 transform hover:-translate-y-0.5"
                 asChild
               >
@@ -285,8 +288,8 @@ export default function Dashboard() {
                   <span className="group-hover:font-medium">Get Help</span>
                 </Link>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="justify-start group hover:bg-primary/10 hover:text-primary transition-all duration-300 transform hover:-translate-y-0.5"
                 asChild
               >
