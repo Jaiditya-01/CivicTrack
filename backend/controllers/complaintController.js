@@ -1,5 +1,6 @@
 const Complaint = require('../models/Complaint');
 const User = require('../models/User');
+const { createNotification } = require('./notificationController');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
@@ -22,6 +23,29 @@ exports.createComplaint = async (req, res) => {
     });
 
     const populatedComplaint = await complaint.populate('citizen', 'name email phone profileImage');
+
+    // Create notification for admins about new complaint
+    const io = req.app.get('io');
+    if (io) {
+      // Find all admin users
+      const adminUsers = await User.find({ 
+        role: { $in: ['admin', 'department_officer'] },
+        isActive: true 
+      });
+      
+      // Send notification to each admin
+      for (const admin of adminUsers) {
+        await createNotification(io, {
+          recipient: admin._id,
+          type: 'complaint_created',
+          title: 'New Complaint Filed',
+          message: `${populatedComplaint.citizen.name} filed a ${issueType} complaint at ${address}`,
+          relatedComplaint: complaint._id,
+          priority: 'medium',
+          actionUrl: `/admin/complaints/${complaint._id}`
+        });
+      }
+    }
 
     res.status(201).json({
       success: true,
@@ -147,6 +171,46 @@ exports.updateComplaintStatus = async (req, res) => {
         success: false,
         message: 'Complaint not found',
       });
+    }
+
+    // Create notifications for status updates
+    const io = req.app.get('io');
+    if (io) {
+      // Notify citizen about status change
+      if (status === 'in_progress') {
+        await createNotification(io, {
+          recipient: complaint.citizen._id,
+          type: 'complaint_updated',
+          title: 'Complaint In Progress',
+          message: `Your complaint about ${complaint.issueType} is now being addressed`,
+          relatedComplaint: complaint._id,
+          priority: 'medium',
+          actionUrl: `/complaints/${complaint._id}`
+        });
+      } else if (status === 'resolved') {
+        await createNotification(io, {
+          recipient: complaint.citizen._id,
+          type: 'complaint_resolved',
+          title: 'Complaint Resolved',
+          message: `Your complaint about ${complaint.issueType} has been resolved`,
+          relatedComplaint: complaint._id,
+          priority: 'high',
+          actionUrl: `/complaints/${complaint._id}`
+        });
+      }
+
+      // Notify assigned officer if assigned
+      if (assignedOfficer && status === 'in_progress') {
+        await createNotification(io, {
+          recipient: assignedOfficer,
+          type: 'complaint_assigned',
+          title: 'New Complaint Assigned',
+          message: `You have been assigned a ${complaint.issueType} complaint`,
+          relatedComplaint: complaint._id,
+          priority: 'high',
+          actionUrl: `/complaints/${complaint._id}`
+        });
+      }
     }
 
     res.status(200).json({

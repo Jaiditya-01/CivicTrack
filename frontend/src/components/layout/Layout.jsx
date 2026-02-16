@@ -5,9 +5,12 @@ import { Menu, X, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNotifications } from '../../contexts/NotificationContext';
+import NotificationDropdown from '../notifications/NotificationDropdown';
 
 export default function Layout() {
   const { user, logout } = useAuth();
+  const { joinUserRoom } = useNotifications();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const location = useLocation();
@@ -17,6 +20,14 @@ export default function Layout() {
     // Enforce dark mode
     document.documentElement.classList.add('dark');
   }, []);
+
+  // Join notification room when user is available
+  useEffect(() => {
+    if (user) {
+      const isAdmin = user.role === 'admin' || user.role === 'department_officer';
+      joinUserRoom(user._id, isAdmin);
+    }
+  }, [user, joinUserRoom]);
 
   // Close sidebar when route changes
   useEffect(() => {
@@ -33,6 +44,7 @@ export default function Layout() {
     { name: isAdmin ? 'Admin' : 'Dashboard', path: isAdmin ? '/admin' : '/dashboard', icon: isAdmin ? '🛡️' : '📊' },
     ...(isAdmin ? [{ name: 'Dashboard', path: '/dashboard', icon: '📊' }] : []),
     { name: 'Complaints', path: '/complaints', icon: '📝' },
+    { name: 'Notifications', path: '/notifications', icon: '🔔' },
     { name: 'Map View', path: '/map', icon: '🗺️' },
     { name: 'Help', path: '/help', icon: '❓' },
     { name: 'Profile', path: '/profile', icon: '👤' },
@@ -68,12 +80,13 @@ export default function Layout() {
               </h1>
             </Link>
           </div>
+          <NotificationDropdown />
         </div>
       </header>
 
       {/* Desktop sidebar - Floating Glass Panel */}
       <aside className="hidden lg:flex flex-col w-72 m-4 rounded-2xl glass border-0 transition-all duration-300 relative z-20 h-[calc(100vh-2rem)]">
-        <div className="flex items-center h-24 px-6">
+        <div className="flex items-center justify-between h-24 px-6">
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform duration-300">
               <span className="text-white font-bold text-xl">CT</span>
@@ -82,6 +95,7 @@ export default function Layout() {
               CivicTrack
             </h1>
           </Link>
+          <NotificationDropdown />
         </div>
 
         <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto no-scrollbar">

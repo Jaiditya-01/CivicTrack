@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import Layout from './components/layout/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -13,6 +14,7 @@ import MapView from './pages/MapView';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import HelpPage from './pages/HelpPage';
+import Notifications from './pages/Notifications';
 import NotFound from './pages/NotFound';
 import './styles/globals.css';
 
@@ -76,25 +78,26 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <AuthProvider queryClient={queryClient}>
-          <AuthWrapper>
-            <Routes>
-              {/* Public routes */}
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <Login />
-                  </PublicRoute>
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <PublicRoute>
-                    <Register />
-                  </PublicRoute>
-                }
-              />
+          <NotificationProvider>
+            <AuthWrapper>
+              <Routes>
+                {/* Public routes */}
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute>
+                      <Login />
+                    </PublicRoute>
+                  }
+                />
+                <Route
+                  path="/register"
+                  element={
+                    <PublicRoute>
+                      <Register />
+                    </PublicRoute>
+                  }
+                />
 
               {/* Protected routes */}
               <Route
@@ -112,6 +115,7 @@ function App() {
                 <Route path="complaints/new" element={<NewComplaint />} />
                 <Route path="complaints/:id" element={<ComplaintDetail />} />
                 <Route path="map" element={<MapView />} />
+                <Route path="notifications" element={<Notifications />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="help" element={<HelpPage />} />
               </Route>
@@ -133,7 +137,8 @@ function App() {
               }}
             />
           </AuthWrapper>
-        </AuthProvider>
+        </NotificationProvider>
+      </AuthProvider>
       </Router>
     </QueryClientProvider>
   );
