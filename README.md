@@ -12,6 +12,7 @@ CivicTrack is a comprehensive MERN Stack application for managing city-related c
 - **Status Tracking**: Monitor complaints through Pending → In Progress → Resolved workflow
 - **Dashboard Analytics**: View statistics and issue heatmaps
 - **Image Upload**: Attach proof images to complaints
+- **Email Notifications**: Admins get email when a citizen files a complaint; citizens get email when status is updated (requires SMTP in .env)
 - **Responsive Design**: Works on desktop and mobile devices
 
 ## Tech Stack
@@ -108,6 +109,14 @@ projects/
    CLOUDINARY_CLOUD_NAME=your_cloud_name
    CLOUDINARY_API_KEY=your_api_key
    CLOUDINARY_API_SECRET=your_api_secret
+   # Email (SMTP) - optional; when set, admins get email on new complaint, citizens get email on status change
+   MAIL_HOST=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_SECURE=false
+   MAIL_USER=your_email@gmail.com
+   MAIL_PASSWORD=your_app_password
+   MAIL_FROM=noreply@civictrack.com
+   FRONTEND_URL=http://localhost:3000
    ```
 
 4. **Start MongoDB** (if using local):
@@ -275,6 +284,13 @@ projects/
 | PORT | Server port | 5000 |
 | NODE_ENV | Environment | development/production |
 | CORS_ORIGIN | Frontend URL for CORS | http://localhost:3000 |
+| MAIL_HOST | SMTP server host | smtp.gmail.com |
+| MAIL_PORT | SMTP port | 587 |
+| MAIL_SECURE | Use TLS (true/false) | false |
+| MAIL_USER | SMTP username / email | your_email@gmail.com |
+| MAIL_PASSWORD | SMTP password or app password | your_app_password |
+| MAIL_FROM | From address for emails | noreply@civictrack.com |
+| FRONTEND_URL | Frontend base URL (for email links) | http://localhost:3000 |
 
 ### Frontend (.env)
 | Variable | Description | Example |
@@ -353,6 +369,19 @@ kill -9 <PID>
 
 ### Real-time Updates
 Frontend polls the backend for updates when viewing complaint list/details.
+
+### Email Notifications
+When SMTP is configured in `.env` (MAIL_HOST, MAIL_USER, MAIL_PASSWORD):
+- **New complaint**: All admins and department officers receive an email with citizen name, issue type, location, and complaint ID.
+- **Status change**: The citizen who filed the complaint receives an email with the new status (In Progress, Resolved, Rejected) and optional resolution notes.
+Emails are sent asynchronously; API responses are not delayed if sending fails.
+
+**Real Gmail setup (live emails to inbox):**
+1. In backend `.env`, leave `MAIL_DEV` commented out (or set to `false`).
+2. Set `MAIL_USER=your_gmail@gmail.com` and `MAIL_FROM=your_gmail@gmail.com`.
+3. **App Password (required for Gmail):** Go to [Google Account → Security](https://myaccount.google.com/security) → 2-Step Verification (enable it if off) → App passwords → Generate a 16-character password. Set `MAIL_PASSWORD=` to that password (no spaces).
+4. Keep `MAIL_HOST=smtp.gmail.com`, `MAIL_PORT=587`, `MAIL_SECURE=false`.
+5. Restart the backend. When a citizen files a complaint, admins get a real email; when status changes, the citizen gets a real email in Gmail.
 
 ## Future Enhancements
 

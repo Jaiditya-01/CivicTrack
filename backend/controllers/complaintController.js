@@ -1,6 +1,7 @@
 const Complaint = require('../models/Complaint');
 const User = require('../models/User');
 const { createNotification } = require('./notificationController');
+const { sendNewComplaintToAdmins, sendStatusUpdateToCitizen } = require('../utils/emailService');
 
 // @desc    Create a new complaint
 // @route   POST /api/complaints
@@ -31,8 +32,8 @@ exports.createComplaint = async (req, res) => {
       const adminUsers = await User.find({ 
         role: { $in: ['admin', 'department_officer'] },
         isActive: true 
-      });
-      
+      }).select('email');
+
       // Send notification to each admin
       for (const admin of adminUsers) {
         await createNotification(io, {
@@ -45,6 +46,22 @@ exports.createComplaint = async (req, res) => {
           actionUrl: `/admin/complaints/${complaint._id}`
         });
       }
+    }
+
+    // Email admins about new complaint (non-blocking)
+    const adminUsersForEmail = await User.find({ 
+      role: { $in: ['admin', 'department_officer'] },
+      isActive: true 
+    }).select('email').lean();
+    const adminEmails = adminUsersForEmail.map((u) => u.email).filter(Boolean);
+    if (adminEmails.length > 0) {
+      sendNewComplaintToAdmins(adminEmails, {
+        citizenName: populatedComplaint.citizen.name,
+        issueType,
+        address: address || populatedComplaint.location?.address || 'N/A',
+        complaintId: complaint.complaintId,
+        complaintMongoId: complaint._id.toString(),
+      }).catch((err) => console.error('Email to admins failed:', err.message));
     }
 
     res.status(201).json({
@@ -211,6 +228,18 @@ exports.updateComplaintStatus = async (req, res) => {
           actionUrl: `/complaints/${complaint._id}`
         });
       }
+    }
+
+    // Email citizen about status update (non-blocking)
+    if (status && complaint.citizen && complaint.citizen.email) {
+      sendStatusUpdateToCitizen(complaint.citizen.email, {
+        citizenName: complaint.citizen.name,
+        complaintId: complaint.complaintId,
+        complaintMongoId: complaint._id.toString(),
+        issueType: complaint.issueType,
+        status,
+        resolutionNotes: resolutionNotes || '',
+      }).catch((err) => console.error('Email to citizen failed:', err.message));
     }
 
     res.status(200).json({
