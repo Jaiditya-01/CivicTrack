@@ -1,15 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Icons } from '../components/ui/icons';
 import api from '../lib/api';
+import { useNotifications } from '../contexts/NotificationContext';
 
 export default function Complaints() {
   const [searchQuery, setSearchQuery] = useState('');
+  const queryClient = useQueryClient();
+  const { socket } = useNotifications();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleCreated = () => {
+      queryClient.invalidateQueries(['complaints']);
+    };
+
+    const handleUpdated = () => {
+      queryClient.invalidateQueries(['complaints']);
+    };
+
+    socket.on('complaintCreated', handleCreated);
+    socket.on('complaintUpdated', handleUpdated);
+
+    return () => {
+      socket.off('complaintCreated', handleCreated);
+      socket.off('complaintUpdated', handleUpdated);
+    };
+  }, [socket, queryClient]);
 
   const { data: complaints, isLoading } = useQuery(
     ['complaints'],

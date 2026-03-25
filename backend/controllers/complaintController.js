@@ -28,6 +28,14 @@ exports.createComplaint = async (req, res) => {
     // Create notification for admins about new complaint
     const io = req.app.get('io');
     if (io) {
+      io.to('admin_room').emit('complaintCreated', {
+        complaint: populatedComplaint,
+      });
+
+      io.to(`user_${req.user.id}`).emit('complaintCreated', {
+        complaint: populatedComplaint,
+      });
+
       // Find all admin users
       const adminUsers = await User.find({ 
         role: { $in: ['admin', 'department_officer'] },
@@ -193,6 +201,13 @@ exports.updateComplaintStatus = async (req, res) => {
     // Create notifications for status updates
     const io = req.app.get('io');
     if (io) {
+      io.to('admin_room').emit('complaintUpdated', {
+        complaint,
+      });
+      io.to(`user_${complaint.citizen._id.toString()}`).emit('complaintUpdated', {
+        complaint,
+      });
+
       // Notify citizen about status change
       if (status === 'in_progress') {
         await createNotification(io, {

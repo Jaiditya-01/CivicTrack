@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
+import { useNotifications } from '../contexts/NotificationContext';
 
 export default function ComplaintList() {
+  const { socket } = useNotifications();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -14,6 +16,26 @@ export default function ComplaintList() {
   useEffect(() => {
     fetchComplaints();
   }, [filters]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleCreated = () => {
+      fetchComplaints();
+    };
+
+    const handleUpdated = () => {
+      fetchComplaints();
+    };
+
+    socket.on('complaintCreated', handleCreated);
+    socket.on('complaintUpdated', handleUpdated);
+
+    return () => {
+      socket.off('complaintCreated', handleCreated);
+      socket.off('complaintUpdated', handleUpdated);
+    };
+  }, [socket, filters.status, filters.issueType]);
 
   const fetchComplaints = async () => {
     try {

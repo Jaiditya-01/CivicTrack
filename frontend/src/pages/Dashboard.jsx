@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotifications } from '../contexts/NotificationContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import {
@@ -28,6 +30,26 @@ const recentActivity = [];
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { socket } = useNotifications();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const refresh = () => {
+      queryClient.invalidateQueries(['recentComplaints']);
+      queryClient.invalidateQueries(['complaintsStatsSummary']);
+      queryClient.invalidateQueries(['stats']);
+    };
+
+    socket.on('complaintCreated', refresh);
+    socket.on('complaintUpdated', refresh);
+
+    return () => {
+      socket.off('complaintCreated', refresh);
+      socket.off('complaintUpdated', refresh);
+    };
+  }, [socket, queryClient]);
 
   // Fetch dashboard stats if user is admin
   const { data: statsData, isLoading: isStatsLoading } = useQuery(

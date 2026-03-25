@@ -6,6 +6,8 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import Layout from './components/layout/Layout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import Complaints from './pages/Complaints';
 import NewComplaint from './pages/NewComplaint';
@@ -95,6 +97,24 @@ function App() {
                   element={
                     <PublicRoute>
                       <Register />
+                    </PublicRoute>
+                  }
+                />
+
+                <Route
+                  path="/forgot-password"
+                  element={
+                    <PublicRoute>
+                      <ForgotPassword />
+                    </PublicRoute>
+                  }
+                />
+
+                <Route
+                  path="/reset-password"
+                  element={
+                    <PublicRoute>
+                      <ResetPassword />
                     </PublicRoute>
                   }
                 />

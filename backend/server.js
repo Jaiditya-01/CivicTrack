@@ -13,10 +13,13 @@ const notificationRoutes = require('./routes/notifications');
 const app = express();
 const server = http.createServer(app);
 
+// Must be a concrete origin when credentials: true (browser rejects * + credentials)
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
+
 // Socket.io setup
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN,
+    origin: corsOrigin,
     methods: ["GET", "POST"],
     credentials: true
   }
@@ -63,7 +66,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN,
+  origin: corsOrigin,
   credentials: true,
 }));
 app.use(express.json({ limit: '50mb' }));

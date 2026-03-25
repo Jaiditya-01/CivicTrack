@@ -74,6 +74,38 @@ export function AuthProvider({ children, queryClient }) {
     }
   }, []);
 
+  const forgotPassword = useCallback(async (email) => {
+    try {
+      const response = await api.post('/auth/forgot-password', { email });
+      const message = response.data?.message || 'If that email exists, a reset link has been sent';
+      toast.success(message);
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        (error.code === 'ERR_NETWORK' || !error.response
+          ? 'Cannot reach the server. Start the backend (e.g. npm start in backend) and ensure CORS_ORIGIN matches this site.'
+          : 'Failed to send reset email. Please try again.');
+      toast.error(errorMessage);
+    }
+  }, []);
+
+  const resetPassword = useCallback(async (token, password) => {
+    try {
+      const response = await api.post(`/auth/reset-password/${token}`, { password });
+      toast.success(response.data?.message || 'Password reset successful');
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        (error.code === 'ERR_NETWORK' || !error.response
+          ? 'Cannot reach the server. Start the backend and check CORS / API URL.'
+          : 'Failed to reset password. Please try again.');
+      toast.error(errorMessage);
+      return null;
+    }
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem('token');
     setToken(null);
@@ -96,6 +128,8 @@ export function AuthProvider({ children, queryClient }) {
     isLoading,
     login,
     register,
+    forgotPassword,
+    resetPassword,
     logout,
     updateUser,
   };

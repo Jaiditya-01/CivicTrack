@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotifications } from '../contexts/NotificationContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Icons } from '../components/ui/icons';
@@ -8,6 +9,7 @@ import api from '../lib/api';
 
 export default function AdminDashboard() {
   const { user, isLoading } = useAuth();
+  const { socket } = useNotifications();
   const [stats, setStats] = useState(null);
   const [complaints, setComplaints] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -25,6 +27,27 @@ export default function AdminDashboard() {
       fetchData();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!socket) return;
+    if (!user || (user.role !== 'admin' && user.role !== 'department_officer')) return;
+
+    const handleCreated = () => {
+      fetchData();
+    };
+
+    const handleUpdated = () => {
+      fetchData();
+    };
+
+    socket.on('complaintCreated', handleCreated);
+    socket.on('complaintUpdated', handleUpdated);
+
+    return () => {
+      socket.off('complaintCreated', handleCreated);
+      socket.off('complaintUpdated', handleUpdated);
+    };
+  }, [socket, user]);
 
   const fetchData = async () => {
     try {
