@@ -24,12 +24,26 @@ const DEFAULT_CENTER = { lat: 20.5937, lng: 78.9629 };
 const DEFAULT_ZOOM = 5;
 const USER_ZOOM = 14;
 
-// Component to handle map view changes
+// Component to handle map view changes — guarded against active zoom animations
 function ChangeView({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
-    if (center && center.lat != null && center.lng != null) {
-      map.setView([center.lat, center.lng], zoom);
+    if (!center || center.lat == null || center.lng == null) return;
+
+    // If a zoom/pan animation is already running, defer until it finishes
+    const fly = () => {
+      try {
+        if (!map._loaded) return; // map container not ready yet
+        map.setView([center.lat, center.lng], zoom, { animate: false });
+      } catch (_) {
+        // swallow any residual _leaflet_pos errors
+      }
+    };
+
+    if (map._animatingZoom) {
+      map.once('zoomend', fly);
+    } else {
+      fly();
     }
   }, [map, center?.lat, center?.lng, zoom]);
   return null;
@@ -189,6 +203,7 @@ export default function MapView() {
           zoom={locationLoading ? 4 : USER_ZOOM}
           style={{ height: '100%', width: '100%', borderRadius: '0.5rem' }}
           zoomControl={false}
+          zoomAnimation={false}
         >
           <ChangeView
             center={userLocation}
