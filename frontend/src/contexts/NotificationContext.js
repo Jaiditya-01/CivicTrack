@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
-import api from '../api';
+import api from '../lib/api';
 
 const NotificationContext = createContext();
 

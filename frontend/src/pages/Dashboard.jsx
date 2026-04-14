@@ -107,7 +107,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="relative overflow-hidden rounded-2xl p-8 text-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl p-8 text-white shadow-xl">
         <div className="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 opacity-90" />
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
         <div className="relative z-10">
@@ -122,7 +122,7 @@ export default function Dashboard() {
                 <img
                   src={user.profileImage}
                   alt=""
-                  className="w-14 h-14 rounded-full border-2 border-white/30 object-cover shrink-0"
+                  className="w-14 h-14 rounded-full border-2 border-primary-foreground/30 object-cover shrink-0"
                 />
               ) : null}
               <div>
@@ -131,7 +131,7 @@ export default function Dashboard() {
                   Here's what's happening with your complaints and reports today.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Button variant="secondary" className="bg-white/10 hover:bg-white/20" asChild>
+                  <Button variant="secondary" className="bg-primary-foreground/10 hover:bg-primary-foreground/20 text-white border-none" asChild>
                     <Link to="/complaints/new">
                       <Plus className="mr-2 h-4 w-4" />
                       New Complaint
@@ -139,7 +139,7 @@ export default function Dashboard() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="bg-transparent border-white/20 text-white hover:bg-white/10"
+                    className="bg-transparent border-primary-foreground/20 text-white hover:bg-primary-foreground/10"
                     asChild
                   >
                     <Link to="/complaints">
@@ -153,7 +153,7 @@ export default function Dashboard() {
             <Button
               variant="outline"
               size="sm"
-              className="shrink-0 bg-white/10 border-white/20 text-white hover:bg-white/20"
+              className="shrink-0 bg-primary-foreground/10 border-primary-foreground/20 text-white hover:bg-primary-foreground/20"
               onClick={logout}
             >
               <LogOut className="mr-2 h-4 w-4" />

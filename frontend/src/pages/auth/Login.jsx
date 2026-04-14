@@ -58,7 +58,7 @@ export default function Login() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="w-full max-w-md relative z-10"
       >
-        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-white/10 backdrop-blur-xl">
+        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-border/50 backdrop-blur-xl">
           <div className="p-8">
             <div className="text-center mb-8">
               <motion.div
@@ -87,7 +87,7 @@ export default function Login() {
                     type="email"
                     placeholder="you@example.com"
                     className={cn(
-                      'pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300',
+                      'pl-10 h-11 transition-all duration-300',
                       errors.email && 'border-red-500 focus:ring-red-500'
                     )}
                     {...register('email')}
@@ -120,7 +120,7 @@ export default function Login() {
                     type="password"
                     placeholder="••••••••"
                     className={cn(
-                      'pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300',
+                      'pl-10 h-11 transition-all duration-300',
                       errors.password && 'border-red-500 focus:ring-red-500'
                     )}
                     {...register('password')}
@@ -137,7 +137,7 @@ export default function Login() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-primary focus:ring-primary border-white/20 bg-black/40 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-border bg-background rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-muted-foreground">
                   Remember me
@@ -168,7 +168,7 @@ export default function Login() {
             <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10"></div>
+                  <div className="w-full border-t border-border/50"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-transparent text-muted-foreground">
@@ -181,7 +181,7 @@ export default function Login() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
+                  className="w-full transition-all duration-300"
                   disabled={isLoading}
                 >
                   <AlertCircle className="h-4 w-4 mr-2" />
@@ -191,7 +191,7 @@ export default function Login() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
+                  className="w-full transition-all duration-300"
                   disabled={isLoading}
                 >
                   <Icons.github className="h-5 w-5 mr-2" />
@@ -201,7 +201,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="bg-white/5 px-6 py-4 text-center border-t border-white/10 backdrop-blur-md">
+          <div className="bg-muted/30 px-6 py-4 text-center border-t border-border/50 backdrop-blur-md">
             <p className="text-sm text-muted-foreground">
               Don't have an account?{' '}
               <Link

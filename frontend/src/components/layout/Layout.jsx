@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, Outlet, Link } from 'react-router-dom';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Sun, Moon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,11 +15,27 @@ export default function Layout() {
   const [mounted, setMounted] = useState(false);
   const location = useLocation();
 
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
   useEffect(() => {
     setMounted(true);
-    // Enforce dark mode
-    document.documentElement.classList.add('dark');
   }, []);
+
+  // Update theme class on document when theme changes
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Join notification room when user is available
   useEffect(() => {
@@ -67,7 +83,7 @@ export default function Layout() {
               variant="ghost"
               size="icon"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden hover:bg-white/10 transition-colors"
+              className="lg:hidden hover:bg-accent transition-colors"
             >
               {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
@@ -80,7 +96,12 @@ export default function Layout() {
               </h1>
             </Link>
           </div>
-          <NotificationDropdown />
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="hover:bg-white/10 transition-colors">
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+            <NotificationDropdown />
+          </div>
         </div>
       </header>
 
@@ -95,7 +116,12 @@ export default function Layout() {
               CivicTrack
             </h1>
           </Link>
-          <NotificationDropdown />
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="hover:bg-white/10 transition-colors">
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+            <NotificationDropdown />
+          </div>
         </div>
 
         <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto no-scrollbar">
@@ -105,10 +131,10 @@ export default function Layout() {
               to={item.path}
               className={cn(
                 'flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group relative overflow-hidden',
-                'text-muted-foreground hover:text-white',
+                'text-muted-foreground hover:text-foreground',
                 location.pathname === item.path
                   ? 'bg-primary/20 text-white shadow-[0_0_20px_-10px_hsl(var(--primary)/0.5)]'
-                  : 'hover:bg-white/5'
+                  : 'hover:bg-muted/50'
               )}
             >
               {location.pathname === item.path && (
@@ -134,7 +160,7 @@ export default function Layout() {
           {user && (
             <Link
               to="/profile"
-              className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/10"
+              className="flex items-center gap-3 w-full p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors border border-border/50"
             >
               {user.profileImage ? (
                 <img
@@ -191,7 +217,7 @@ export default function Layout() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-white/10"
+                  className="hover:bg-muted/50"
                   onClick={() => setIsSidebarOpen(false)}
                 >
                   <X className="h-5 w-5" />
@@ -205,7 +231,7 @@ export default function Layout() {
                     onClick={() => setIsSidebarOpen(false)}
                     className={cn(
                       'flex items-center px-4 py-3 rounded-xl transition-colors',
-                      'text-muted-foreground hover:bg-white/5 hover:text-foreground',
+                      'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
                       location.pathname === item.path && 'bg-primary/20 text-white'
                     )}
                   >
@@ -214,10 +240,10 @@ export default function Layout() {
                   </Link>
                 ))}
               </nav>
-              <div className="p-4 mt-auto border-t border-white/5">
+              <div className="p-4 mt-auto border-t border-border/50">
                 <Button
                   variant="outline"
-                  className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10 border-white/5"
+                  className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10 border-border/50"
                   onClick={() => { logout(); setIsSidebarOpen(false); }}
                 >
                   <LogOut className="mr-2 h-4 w-4" />

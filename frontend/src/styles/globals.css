@@ -5,61 +5,68 @@
 @layer base {
   :root {
     /* Default to Dark (Zinc Palette) */
-    --background: 240 10% 3.9%;
+    --background: 240 10% 4.5%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 3.9%;
+    --card: 240 10% 5%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 240 10% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 263.4 70% 50.4%; /* Vivid Violet */
+    --primary: 263.4 75% 55%; /* Slightly brighter primary */
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 240 4% 16%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
 
-    --accent: 240 3.7% 15.9%;
+    --accent: 240 4% 18%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 240 4% 20%;
+    --input: 240 4% 20%;
+    --ring: 263.4 75% 55%;
 
     --radius: 0.75rem;
 
-    --gradient-from: 263.4 70% 50.4%;
-    --gradient-to: 280 65% 60%;
+    --gradient-from: 263.4 75% 55%;
+    --gradient-to: 280 70% 65%;
   }
 
-  /* Optional: Light mode overrides if we ever want to switch back, but keeping dark dominant */
   .light {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 210 20% 98%;
+    --foreground: 240 10% 10%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 240 10% 10%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 262.1 83.3% 57.8%;
+    --popover-foreground: 240 10% 10%;
+    
+    --primary: 263.4 75% 55%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    
+    --secondary: 240 5% 90%;
+    --secondary-foreground: 240 10% 15%;
+    
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 10% 45%;
+    
+    --accent: 240 5% 88%;
+    --accent-foreground: 240 10% 10%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 240 10% 85%;
+    --input: 240 10% 85%;
+    --ring: 263.4 75% 55%;
   }
 }
 
@@ -71,91 +78,36 @@
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
     background-image: 
-      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 0% 0%, hsl(var(--primary) / 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.08) 0%, transparent 40%);
     background-attachment: fixed;
   }
 }
 
-/* Glassmorphism Utilities */
+/* Updated Glassmorphism Utilities to be theme-aware */
 .glass {
-  @apply bg-background/60 backdrop-blur-lg border border-white/10 shadow-xl;
+  @apply bg-background/70 backdrop-blur-xl border border-border/40 shadow-xl;
 }
 
 .glass-card {
-  @apply bg-card/50 backdrop-blur-md border border-white/5 shadow-lg hover:bg-card/70 transition-all duration-300;
+  @apply bg-card/60 backdrop-blur-md border border-border/30 shadow-lg hover:border-primary/30 hover:bg-card/80 transition-all duration-300;
 }
 
 /* Gradient text */
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white/80 to-white/60;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80;
 }
 
 .gradient-text-primary {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
-}
-
-/* Animations */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5); }
-  50% { opacity: 0.7; box-shadow: 0 0 10px -5px hsl(var(--primary) / 0.3); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Utility to hide scrollbar but allow scroll */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500;
 }
 
 /* Component Overrides to enforce the look */
 .card {
-  @apply glass-card rounded-xl;
-}
-
-.btn {
-  @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background active:scale-95;
-}
-
-.btn-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.6)] hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.8)];
-}
-
-.btn-secondary {
-  @apply bg-secondary/50 text-secondary-foreground hover:bg-secondary/70 border border-white/5 backdrop-blur-sm;
+  @apply glass-card rounded-2xl;
 }
 
 .input {
-  @apply flex h-11 w-full rounded-lg border border-input/50 bg-background/50 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all focus:border-primary/50 focus:bg-background/80;
+  @apply flex h-11 w-full rounded-xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all;
 }
 

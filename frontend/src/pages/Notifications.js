@@ -175,7 +175,7 @@ const NotificationsPage = () => {
                                     ? 'bg-red-500/10 text-red-500 border-red-500/20'
                                     : notification.priority === 'medium'
                                     ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20'
-                                    : 'bg-muted text-muted-foreground border-border'
+                                    : 'bg-muted/50 text-muted-foreground border-border/50'
                                 }`}
                               >
                                 {notification.priority}

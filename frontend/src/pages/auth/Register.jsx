@@ -94,7 +94,7 @@ export default function Register() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl relative z-10"
       >
-        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-white/10 backdrop-blur-xl">
+        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-border/50 backdrop-blur-xl">
           <div className="p-8">
             <div className="text-center mb-8">
               <motion.div
@@ -122,7 +122,7 @@ export default function Register() {
                       id="name"
                       type="text"
                       placeholder="John Doe"
-                      className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.name && 'border-red-500')}
+                      className={cn('pl-10 h-11 transition-all duration-300', errors.name && 'border-red-500')}
                       {...register('name')}
                       disabled={isLoading}
                     />
@@ -136,7 +136,7 @@ export default function Register() {
                     id="phone"
                     type="tel"
                     placeholder="9876543210"
-                    className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.phone && 'border-red-500')}
+                    className={cn('h-11 transition-all duration-300', errors.phone && 'border-red-500')}
                     {...register('phone')}
                     disabled={isLoading}
                   />
@@ -156,7 +156,7 @@ export default function Register() {
                       id="email"
                       type="email"
                       placeholder="you@example.com"
-                      className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.email && 'border-red-500')}
+                      className={cn('pl-10 h-11 transition-all duration-300', errors.email && 'border-red-500')}
                       {...register('email')}
                       disabled={isLoading}
                     />
@@ -170,7 +170,7 @@ export default function Register() {
                     id="city"
                     type="text"
                     placeholder="Your city"
-                    className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.city && 'border-red-500')}
+                    className={cn('h-11 transition-all duration-300', errors.city && 'border-red-500')}
                     {...register('city')}
                     disabled={isLoading}
                   />
@@ -185,7 +185,7 @@ export default function Register() {
                   id="address"
                   type="text"
                   placeholder="Street, area, landmark"
-                  className={cn('bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.address && 'border-red-500')}
+                  className={cn('h-11 transition-all duration-300', errors.address && 'border-red-500')}
                   {...register('address')}
                   disabled={isLoading}
                 />
@@ -198,7 +198,7 @@ export default function Register() {
                 <select
                   id="department"
                   className={cn(
-                    'block w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary/50 text-white transition-all duration-300',
+                    'block w-full h-11 rounded-xl border border-input bg-background/50 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary/50 transition-all duration-300',
                     errors.department && 'border-red-500 focus:ring-red-500'
                   )}
                   {...register('department')}
@@ -226,7 +226,7 @@ export default function Register() {
                     id="password"
                     type="password"
                     placeholder="••••••••"
-                    className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.password && 'border-red-500')}
+                    className={cn('pl-10 h-11 transition-all duration-300', errors.password && 'border-red-500')}
                     {...register('password')}
                     disabled={isLoading}
                   />
@@ -248,7 +248,7 @@ export default function Register() {
                     id="confirmPassword"
                     type="password"
                     placeholder="••••••••"
-                    className={cn('pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300', errors.confirmPassword && 'border-red-500')}
+                    className={cn('pl-10 h-11 transition-all duration-300', errors.confirmPassword && 'border-red-500')}
                     {...register('confirmPassword')}
                     disabled={isLoading}
                   />
@@ -262,7 +262,7 @@ export default function Register() {
                     id="terms"
                     name="terms"
                     type="checkbox"
-                    className="h-4 w-4 text-primary focus:ring-primary border-white/20 bg-black/40 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary border-border bg-background rounded"
                     required
                   />
                 </div>
@@ -304,7 +304,7 @@ export default function Register() {
             <div className="mt-8">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10"></div>
+                  <div className="w-full border-t border-border/50"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-transparent text-muted-foreground">
@@ -317,7 +317,7 @@ export default function Register() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
+                  className="w-full transition-all duration-300"
                   disabled={isLoading}
                 >
                   <Icons.google className="h-5 w-5 mr-2" />
@@ -327,7 +327,7 @@ export default function Register() {
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300"
+                  className="w-full transition-all duration-300"
                   disabled={isLoading}
                 >
                   <Icons.github className="h-5 w-5 mr-2" />
@@ -337,7 +337,7 @@ export default function Register() {
             </div>
           </div>
 
-          <div className="bg-white/5 px-6 py-4 text-center border-t border-white/10 backdrop-blur-md">
+          <div className="bg-muted/30 px-6 py-4 text-center border-t border-border/50 backdrop-blur-md">
             <p className="text-sm text-muted-foreground">
               Already have an account?{' '}
               <Link
