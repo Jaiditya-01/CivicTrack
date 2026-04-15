@@ -97,7 +97,7 @@ export default function Layout() {
             </Link>
           </div>
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="hover:bg-white/10 transition-colors">
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="transition-colors">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
             <NotificationDropdown />
@@ -106,7 +106,7 @@ export default function Layout() {
       </header>
 
       {/* Desktop sidebar - Floating Glass Panel */}
-      <aside className="hidden lg:flex flex-col w-72 m-4 rounded-2xl glass border-0 transition-all duration-300 relative z-20 h-[calc(100vh-2rem)]">
+      <aside className="hidden lg:flex flex-col w-72 m-4 rounded-2xl glass transition-all duration-300 relative z-20 h-[calc(100vh-2rem)]">
         <div className="flex items-center justify-between h-24 px-6">
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-105 transition-transform duration-300">
@@ -117,7 +117,7 @@ export default function Layout() {
             </h1>
           </Link>
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="hover:bg-white/10 transition-colors">
+            <Button variant="ghost" size="icon" onClick={toggleTheme} className="transition-colors">
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
             <NotificationDropdown />
@@ -133,8 +133,8 @@ export default function Layout() {
                 'flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 group relative overflow-hidden',
                 'text-muted-foreground hover:text-foreground',
                 location.pathname === item.path
-                  ? 'bg-primary/20 text-white shadow-[0_0_20px_-10px_hsl(var(--primary)/0.5)]'
-                  : 'hover:bg-muted/50'
+                  ? 'bg-primary/20 text-primary-foreground font-semibold shadow-[0_0_20px_-10px_hsl(var(--primary)/0.5)]'
+                  : 'hover:bg-accent'
               )}
             >
               {location.pathname === item.path && (
@@ -232,7 +232,7 @@ export default function Layout() {
                     className={cn(
                       'flex items-center px-4 py-3 rounded-xl transition-colors',
                       'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
-                      location.pathname === item.path && 'bg-primary/20 text-white'
+                      location.pathname === item.path && 'bg-primary/20 text-primary-foreground font-semibold'
                     )}
                   >
                     <span className="mr-3 text-lg">{item.icon}</span>

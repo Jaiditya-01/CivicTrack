@@ -8,9 +8,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import { Icons } from '../../components/ui/icons';
 import { cn } from '../../lib/utils';
-import { ArrowRight } from 'lucide-react';
+import { Icons } from '../../components/ui/icons';
+import { ArrowRight, Loader2 } from 'lucide-react';
 
 const registerSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -198,19 +198,19 @@ export default function Register() {
                 <select
                   id="department"
                   className={cn(
-                    'block w-full h-11 rounded-xl border border-input bg-background/50 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary/50 transition-all duration-300',
+                    'block w-full h-11 rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-200',
                     errors.department && 'border-red-500 focus:ring-red-500'
                   )}
                   {...register('department')}
                   disabled={isLoading}
                   defaultValue=""
                 >
-                  <option value="" className="bg-gray-900 text-foreground">Select department</option>
-                  <option value="roads" className="bg-gray-900 text-foreground">Roads</option>
-                  <option value="water" className="bg-gray-900 text-foreground">Water</option>
-                  <option value="electricity" className="bg-gray-900 text-foreground">Electricity</option>
-                  <option value="sanitation" className="bg-gray-900 text-foreground">Sanitation</option>
-                  <option value="public_safety" className="bg-gray-900 text-foreground">Public Safety</option>
+                  <option value="">Select department</option>
+                  <option value="roads">Roads</option>
+                  <option value="water">Water</option>
+                  <option value="electricity">Electricity</option>
+                  <option value="sanitation">Sanitation</option>
+                  <option value="public_safety">Public Safety</option>
                 </select>
                 {errors.department && <p className="mt-1 text-sm text-red-500">{errors.department.message}</p>}
               </div>
@@ -288,7 +288,7 @@ export default function Register() {
                 >
                   {isLoading ? (
                     <>
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creating account...
                     </>
                   ) : (
@@ -301,40 +301,7 @@ export default function Register() {
               </div>
             </form>
 
-            <div className="mt-8">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border/50"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-transparent text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
 
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button
-                  variant="outline"
-                  type="button"
-                  className="w-full transition-all duration-300"
-                  disabled={isLoading}
-                >
-                  <Icons.google className="h-5 w-5 mr-2" />
-                  Google
-                </Button>
-
-                <Button
-                  variant="outline"
-                  type="button"
-                  className="w-full transition-all duration-300"
-                  disabled={isLoading}
-                >
-                  <Icons.github className="h-5 w-5 mr-2" />
-                  GitHub
-                </Button>
-              </div>
-            </div>
           </div>
 
           <div className="bg-muted/30 px-6 py-4 text-center border-t border-border/50 backdrop-blur-md">

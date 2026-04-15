@@ -8,27 +8,35 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md transition-shadow border border-primary/20',
+        // Solid filled — always visible in any theme
+        default:
+          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg border border-primary/20',
         destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm hover:shadow-md border border-destructive/20',
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm border border-destructive/20',
+        // Outline: use border-border (now properly contrasted) + solid bg-card (not transparent)
         outline:
-          'border border-input bg-background/50 hover:bg-accent hover:text-accent-foreground backdrop-blur-sm',
+          'border border-border bg-card text-foreground hover:bg-accent hover:text-accent-foreground shadow-sm',
+        // Secondary: solid secondary bg, never transparent
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/70 border border-border shadow-sm backdrop-blur-sm',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
-        glow: 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.6)] animate-pulse-glow',
+          'bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-border shadow-sm',
+        // Ghost: text-foreground so it's visible; hover shows accent bg
+        ghost:
+          'text-foreground hover:bg-accent hover:text-accent-foreground',
+        link:
+          'text-primary underline-offset-4 hover:underline',
+        glow:
+          'bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.6)] animate-pulse-glow border border-primary/20',
       },
       size: {
         default: 'h-10 py-2 px-4',
-        sm: 'h-9 px-3 rounded-md text-xs',
-        lg: 'h-11 px-8 rounded-md text-base',
-        icon: 'h-10 w-10',
+        sm:      'h-9 px-3 rounded-md text-xs',
+        lg:      'h-11 px-8 rounded-md text-base',
+        icon:    'h-10 w-10',
       },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
+      size:    'default',
     },
   }
 );

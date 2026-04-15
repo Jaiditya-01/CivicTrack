@@ -42,7 +42,7 @@ const NotificationsPage = () => {
     if (priority === 'high') return <div className="w-3 h-3 bg-red-500 rounded-full"></div>;
     if (type === 'complaint_resolved') return <div className="w-3 h-3 bg-green-500 rounded-full"></div>;
     if (type === 'complaint_assigned') return <div className="w-3 h-3 bg-blue-500 rounded-full"></div>;
-    return <div className="w-3 h-3 bg-gray-400 rounded-full"></div>;
+    return <div className="w-3 h-3 bg-muted-foreground/60 rounded-full"></div>;
   };
 
   const getNotificationColor = (priority) => {

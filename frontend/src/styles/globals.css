@@ -4,69 +4,69 @@
 
 @layer base {
   :root {
-    /* Default to Dark (Zinc Palette) */
-    --background: 240 10% 4.5%;
-    --foreground: 0 0% 98%;
+    /* ── Dark Mode (default) ── */
+    --background: 240 10% 5%;
+    --foreground: 0 0% 96%;
 
-    --card: 240 10% 5%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 8% 9%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 240 10% 5%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 8% 9%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 263.4 75% 55%; /* Slightly brighter primary */
-    --primary-foreground: 210 40% 98%;
+    --primary: 263.4 75% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 240 6% 17%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 240 6% 17%;
+    --muted-foreground: 240 5% 58%;
 
-    --accent: 240 4% 18%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 6% 22%;
+    --accent-foreground: 0 0% 96%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 4% 20%;
-    --input: 240 4% 20%;
-    --ring: 263.4 75% 55%;
+    /* KEY FIX: border was 240 4% 20% ≈ nearly same as bg 240 10% 5% — invisible! */
+    --border: 240 8% 36%;
+    --input: 240 8% 32%;
+    --ring: 263.4 75% 60%;
 
     --radius: 0.75rem;
-
-    --gradient-from: 263.4 75% 55%;
-    --gradient-to: 280 70% 65%;
   }
 
   .light {
-    --background: 210 20% 98%;
-    --foreground: 240 10% 10%;
-    
+    /* ── Light Mode ── */
+    --background: 210 20% 97%;
+    --foreground: 240 10% 8%;
+
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 10%;
-    
+    --card-foreground: 240 10% 8%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
-    
-    --primary: 263.4 75% 55%;
-    --primary-foreground: 210 40% 98%;
-    
-    --secondary: 240 5% 90%;
-    --secondary-foreground: 240 10% 15%;
-    
-    --muted: 240 5% 90%;
-    --muted-foreground: 240 10% 45%;
-    
-    --accent: 240 5% 88%;
-    --accent-foreground: 240 10% 10%;
-    
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 240 10% 85%;
-    --input: 240 10% 85%;
-    --ring: 263.4 75% 55%;
+    --popover-foreground: 240 10% 8%;
+
+    --primary: 263.4 75% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 88%;
+    --secondary-foreground: 240 10% 12%;
+
+    --muted: 240 5% 91%;
+    --muted-foreground: 240 8% 42%;
+
+    --accent: 240 5% 86%;
+    --accent-foreground: 240 10% 8%;
+
+    --destructive: 0 84% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* KEY FIX: border was 240 10% 85% — very faint light gray, barely visible */
+    --border: 240 8% 62%;
+    --input: 240 8% 62%;
+    --ring: 263.4 75% 52%;
   }
 }
 
@@ -77,37 +77,74 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
-    background-image: 
-      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.12) 0%, transparent 50%),
-      radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.08) 0%, transparent 40%);
+    background-image:
+      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.10) 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, hsl(var(--primary) / 0.06) 0%, transparent 40%);
     background-attachment: fixed;
   }
 }
 
-/* Updated Glassmorphism Utilities to be theme-aware */
+/* ── Glassmorphism ── */
+/* Solid enough to be visible in both themes; border uses full --border var */
 .glass {
-  @apply bg-background/70 backdrop-blur-xl border border-border/40 shadow-xl;
+  @apply bg-card/90 backdrop-blur-xl border border-border shadow-xl;
 }
 
 .glass-card {
-  @apply bg-card/60 backdrop-blur-md border border-border/30 shadow-lg hover:border-primary/30 hover:bg-card/80 transition-all duration-300;
+  @apply bg-card/80 backdrop-blur-md border border-border/70 shadow-lg hover:border-primary/40 hover:bg-card/95 transition-all duration-300;
 }
 
-/* Gradient text */
+/* ── Gradient Text ── */
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70;
 }
 
 .gradient-text-primary {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500;
 }
 
-/* Component Overrides to enforce the look */
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
+}
+
+/* ── Animations ── */
+@keyframes float {
+  0%   { transform: translateY(0px);   }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0px);   }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.5); }
+  50%       { opacity: 0.7; box-shadow: 0 0 10px -5px hsl(var(--primary) / 0.3); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Hide scrollbar but keep scroll ── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Component Utilities ── */
 .card {
   @apply glass-card rounded-2xl;
 }
-
-.input {
-  @apply flex h-11 w-full rounded-xl border border-input bg-background/50 px-4 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all;
-}
-

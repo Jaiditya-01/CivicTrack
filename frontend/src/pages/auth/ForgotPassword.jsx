@@ -50,7 +50,7 @@ export default function ForgotPassword() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="w-full max-w-md relative z-10"
       >
-        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-white/10 backdrop-blur-xl">
+        <div className="glass rounded-2xl shadow-2xl overflow-hidden border border-border shadow-xl">
           <div className="p-8">
             <div className="text-center mb-8">
               <motion.div
@@ -77,7 +77,7 @@ export default function ForgotPassword() {
                     type="email"
                     placeholder="you@example.com"
                     className={cn(
-                      'pl-10 bg-black/40 border-white/10 text-white placeholder:text-muted-foreground focus:bg-black/60 transition-all duration-300',
+                      'pl-10',
                       errors.email && 'border-red-500 focus:ring-red-500'
                     )}
                     {...register('email')}
@@ -106,7 +106,7 @@ export default function ForgotPassword() {
             </form>
           </div>
 
-          <div className="bg-white/5 px-6 py-4 text-center border-t border-white/10 backdrop-blur-md">
+          <div className="bg-muted/30 px-6 py-4 text-center border-t border-border backdrop-blur-md">
             <p className="text-sm text-muted-foreground">
               Remembered your password?{' '}
               <Link to="/login" className="font-medium text-primary hover:text-primary/80 transition-colors hover:underline">

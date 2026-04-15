@@ -337,7 +337,7 @@ export default function Dashboard() {
                         <span className="text-muted-foreground">{item.name}</span>
                         <span className="font-medium">{item.value}%</span>
                       </div>
-                      <div className="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                         <div
                           className={`h-full ${item.color} rounded-full transition-all`}
                           style={{ width: `${item.value}%` }}
